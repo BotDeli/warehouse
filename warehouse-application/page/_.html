@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Регистрация пользователя</title>
+</head>
+<body>
+<h1>Регистрация пользователя</h1>
+
+<form id="registrationForm">
+	<label for="username">Имя пользователя:</label>
+	<input type="text" id="username" name="username" required><br><br>
+
+	<label for="password">Пароль:</label>
+	<input type="password" id="password" name="password" required><br><br>
+
+	<input type="submit" value="Зарегистрироваться">
+
+	<label id="result">Здесь</label>
+</form>
+
+<script>
+	document.getElementById("registrationForm").addEventListener("submit", function(event) {
+		event.preventDefault();
+		let xhr = new XMLHttpRequest();
+		url = "http://localhost:8080/RegistrationUser";
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-Type", "application/json");
+		var username = document.querySelector('#username').value;
+		var password = document.querySelector('#password').value;
+		xhr.onreadystatechange = function () {
+			// если запрос принят и сервер ответил, что всё в порядке
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				// выводим то, что ответил нам сервер — так мы убедимся, что данные он получил правильно
+				document.querySelector('#result').innerHTML = this.responseText;
+			}
+		};
+
+		var data = JSON.stringify({
+			"username": username,
+			"password": password
+		});
+		xhr.send(data);
+	});
+</script>
+</body>
+</html>
